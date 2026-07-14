@@ -1,6 +1,7 @@
 import {select ,isCancel} from "@clack/prompts";
 import chalk from "chalk";
 import figlet from "figlet";
+import { runCliMode } from "../mode/cli";
 
 const BANNER_FONT = "ANSI Shadow";
 const SHADOW = chalk.hex("#5b4d9e");
@@ -37,17 +38,18 @@ export async function runWakeUp() {
         message: "Select a wake-up mode",
         options: [
             { value: "cli", label: "Command Line Interface (CLI)" },
-            { value: "telegram", label: "Telegram Bot" }
+            { value: "telegram", label: "Telegram Bot" },
+            { value: "exit", label: "Exit" },
         ]
     });
 
-    if (isCancel(mode)) {
-        process.exit(0);
+    if (isCancel(mode || mode === "exit")) {
+        console.log(chalk.red("\n Goodbye! \n"));
     }
 
     if(mode === "cli"){
-        console.log(chalk.green("You selected CLI mode. Starting the CLI..."));
-    }else {
+        runCliMode();
+    }else if(mode === "telegram"){
         console.log(chalk.green("You selected Telegram Bot mode. Starting the bot..."));
     }
 }
