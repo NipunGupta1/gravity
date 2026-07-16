@@ -40,17 +40,17 @@ export async function runAgentMode(){
 
     const result = await agent.generate({
         prompt: goal.trim(),
-        onStepFinish:({toolCalls})=> {
-            for(const call of toolCalls){
-                const preview = JSON.stringify(call.input).slice(0,100);
-                console.log(
-                    chalk.green(' Tool Call: '),
-                    chalk.bold(chalk.yellow(call.toolName)),
-                    chalk.dim(`(${preview}${preview.length === 100 ? '...' : ''})`)
-                )
-            }
+        onStepFinish: ({ toolCalls }) => {
+        for (const tc of toolCalls) {
+            const preview = JSON.stringify(tc.input).slice(0, 160);
+            console.log(
+                chalk.green("  ✓"),
+                chalk.bold(String(tc.toolName)),
+                chalk.dim(preview + (preview.length >= 160 ? "..." : "")),
+            );
         }
-    })
+    },
+    });
 
     if(result.text?.trim()){
         console.log(renderterminalMarkdown(result.text));
